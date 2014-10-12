@@ -1,30 +1,34 @@
 class Basket
-  items: []
-  distinctCount: 0
-  totalCount: 0
+  constructor: ->
+    @items = []
+    @distinctCount = 0
+    @totalCount = 0
 
   add: (item) ->
-    #if item is in basket
-    #  increase quantity
-    #else
-    #    add new item, with quantity of 1
-    itemInBasket = false
-    for basketItem in @items
-      itemInBasket = true if basketItem.item.id is item.id
-
-    if itemInBasket
-      currentItem = undefined
-      for basketItem in @items
-        currentItem = basketItem if basketItem.item.id is item.id
+    if @itemExistsInBasket(item)
+      currentItem = getItemFromBasket item
       currentItem.quantity++
     else
       @items.push
         item: item,
         quantity: 1
 
-
     @distinctCount = @items.length
+
     @totalCount++
 
+  empty: ->
+    @items = []
+    @distinctCount = 0
+    @totalCount = 0
+
+  itemExistsInBasket: (item) ->
+    for basketItem in @items
+      return true if basketItem.item.id is item.id
+    false
+  getItemFromBasket: (item) ->
+    for basketItem in @items
+      return basketItem if basketItem.item.id is item.id
+    false
 
 window.Basket = Basket
