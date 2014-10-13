@@ -9,6 +9,20 @@
       this.price = price;
     }
 
+    Item.prototype.update = function(opts) {
+      var key, value, _results;
+      _results = [];
+      for (key in opts) {
+        value = opts[key];
+        if (this[key] != null) {
+          _results.push(this[key] = value);
+        } else {
+          _results.push(void 0);
+        }
+      }
+      return _results;
+    };
+
     return Item;
 
   })();
