@@ -9,7 +9,7 @@
       return mouse = new Item(2, "mouse", 10);
     });
     describe("Add a basket", function() {
-      return it("should keep track of distict items and quantities in the basket", function() {
+      it("should keep track of distict items and quantities in the basket", function() {
         basket.add(laptop);
         expect(basket.totalCount).toEqual(1);
         expect(basket.distinctCount).toEqual(1);
@@ -19,6 +19,12 @@
         basket.add(mouse);
         expect(basket.totalCount).toEqual(3);
         return expect(basket.distinctCount).toEqual(2);
+      });
+      return it("Allow adding more than 1 item to the basket at once", function() {
+        basket.add(laptop, 3);
+        expect(basket.totalCount).toEqual(3);
+        expect(basket.getQuantity(laptop)).toEqual(3);
+        return expect(basket.distinctCount).toEqual(1);
       });
     });
     describe("Emtpy a basket", function() {
@@ -90,13 +96,20 @@
         expect(basket.getQuantity(laptop)).toEqual(0);
         return expect(basket.itemExistsInBasket(laptop)).toBeFalsy();
       });
-      return it("should deal with multiple items correctly", function() {
+      it("should deal with multiple items correctly", function() {
         basket.add(laptop);
         basket.add(laptop);
         basket.add(mouse);
         basket.remove(mouse);
         expect(basket.itemExistsInBasket(mouse)).toBeFalsy();
         return expect(basket.getQuantity(laptop)).toEqual(2);
+      });
+      return it("should not break totalCount with invalid quantities", function() {
+        basket.add(laptop);
+        basket.add(laptop);
+        basket.add(mouse);
+        basket.remove(laptop, 3);
+        return expect(basket.totalCount).toEqual(1);
       });
     });
   });

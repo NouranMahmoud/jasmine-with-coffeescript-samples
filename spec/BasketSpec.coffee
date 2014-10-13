@@ -20,6 +20,12 @@ describe "Basket", ->
       expect(basket.totalCount).toEqual 3
       expect(basket.distinctCount).toEqual 2
 
+    it "Allow adding more than 1 item to the basket at once", ->
+      basket.add laptop, 3
+      expect(basket.totalCount).toEqual 3
+      expect(basket.getQuantity(laptop)).toEqual 3
+      expect(basket.distinctCount).toEqual 1
+
   describe "Emtpy a basket", ->
     it "empties the basket with items in", ->
       basket.add laptop
@@ -88,3 +94,10 @@ describe "Basket", ->
       basket.remove mouse
       expect(basket.itemExistsInBasket(mouse)).toBeFalsy()
       expect(basket.getQuantity(laptop)).toEqual 2
+
+    it "should not break totalCount with invalid quantities", ->
+      basket.add laptop
+      basket.add laptop
+      basket.add mouse
+      basket.remove laptop, 3
+      expect(basket.totalCount).toEqual 1

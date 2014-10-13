@@ -9,19 +9,21 @@
       this.totalCount = 0;
     }
 
-    Basket.prototype.add = function(item) {
+    Basket.prototype.add = function(item, quantity) {
       var currentItem;
+      if (quantity == null) {
+        quantity = 1;
+      }
       if (this.itemExistsInBasket(item)) {
         currentItem = this.getItemFromBasket(item);
-        currentItem.quantity++;
+        currentItem.quantity += quantity;
       } else {
         this.items.push({
           item: item,
-          quantity: 1
+          quantity: quantity
         });
       }
-      this.distinctCount = this.items.length;
-      return this.totalCount++;
+      return this.updateCount();
     };
 
     Basket.prototype.empty = function() {
@@ -90,8 +92,19 @@
         itemLoc = this.getItemIndex(item);
         this.items.splice(itemLoc, 1);
       }
+      return this.updateCount();
+    };
+
+    Basket.prototype.updateCount = function() {
+      var item, total, _i, _len, _ref;
+      total = 0;
+      _ref = this.items;
+      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+        item = _ref[_i];
+        total += item.quantity;
+      }
       this.distinctCount = this.items.length;
-      return this.totalCount -= quantity;
+      return this.totalCount = total;
     };
 
     return Basket;
