@@ -37,14 +37,13 @@
     describe("Finding an item in a basket", function() {
       it("returns true if the item exist", function() {
         basket.add(laptop);
-        console.log(basket.items);
         return expect(basket.itemExistsInBasket(laptop)).toBeTruthy();
       });
       return it("returns false if the item not exist", function() {
         return expect(basket.itemExistsInBasket(laptop)).toBeFalsy();
       });
     });
-    return describe("Fetching items from basket", function() {
+    describe("Fetching items from basket", function() {
       it("returns the item object if it exists", function() {
         var result;
         basket.add(laptop);
@@ -54,6 +53,50 @@
       });
       return it("returns false if the item is not in basket", function() {
         return expect(basket.getItemFromBasket(laptop)).toBeFalsy();
+      });
+    });
+    describe("getting the quantity of item in basket", function() {
+      it("returns the correct quantity", function() {
+        basket.add(laptop);
+        basket.add(laptop);
+        return expect(basket.getQuantity(laptop)).toEqual(2);
+      });
+      return it("returns 0 if there's no items", function() {
+        return expect(basket.getQuantity(laptop)).toEqual(0);
+      });
+    });
+    describe("getting index of item", function() {
+      it("returns the index", function() {
+        basket.add(laptop);
+        return expect(basket.getItemIndex(laptop)).toEqual(0);
+      });
+      return it("returns -1 index if item not found", function() {
+        return expect(basket.getItemIndex(laptop)).toEqual(-1);
+      });
+    });
+    return describe("removing from a basket", function() {
+      it("should deduct the quantity passed in", function() {
+        basket.add(laptop);
+        basket.add(laptop);
+        basket.remove(laptop, 1);
+        expect(basket.getQuantity(laptop)).toEqual(1);
+        expect(basket.distinctCount).toEqual(1);
+        return expect(basket.totalCount).toEqual(1);
+      });
+      it("should remove item completely if removing the total quantity", function() {
+        basket.add(laptop);
+        basket.add(laptop);
+        basket.remove(laptop, 2);
+        expect(basket.getQuantity(laptop)).toEqual(0);
+        return expect(basket.itemExistsInBasket(laptop)).toBeFalsy();
+      });
+      return it("should deal with multiple items correctly", function() {
+        basket.add(laptop);
+        basket.add(laptop);
+        basket.add(mouse);
+        basket.remove(mouse);
+        expect(basket.itemExistsInBasket(mouse)).toBeFalsy();
+        return expect(basket.getQuantity(laptop)).toEqual(2);
       });
     });
   });

@@ -12,7 +12,7 @@
     Basket.prototype.add = function(item) {
       var currentItem;
       if (this.itemExistsInBasket(item)) {
-        currentItem = getItemFromBasket(item);
+        currentItem = this.getItemFromBasket(item);
         currentItem.quantity++;
       } else {
         this.items.push({
@@ -52,6 +52,46 @@
         }
       }
       return false;
+    };
+
+    Basket.prototype.getQuantity = function(item) {
+      if (this.itemExistsInBasket(item)) {
+        return this.getItemFromBasket(item).quantity;
+      } else {
+        return 0;
+      }
+    };
+
+    Basket.prototype.getItemIndex = function(item) {
+      var basketItem, count, _i, _len, _ref;
+      count = 0;
+      _ref = this.items;
+      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+        basketItem = _ref[_i];
+        if (basketItem.item.id === item.id) {
+          return count;
+        }
+        count++;
+      }
+      return -1;
+    };
+
+    Basket.prototype.remove = function(item, quantity) {
+      var basketItem, itemLoc;
+      if (quantity == null) {
+        quantity = 1;
+      }
+      if (!this.itemExistsInBasket(item)) {
+        return;
+      }
+      basketItem = this.getItemFromBasket(item);
+      basketItem.quantity -= quantity;
+      if (basketItem.quantity < 1) {
+        itemLoc = this.getItemIndex(item);
+        this.items.splice(itemLoc, 1);
+      }
+      this.distinctCount = this.items.length;
+      return this.totalCount -= quantity;
     };
 
     return Basket;

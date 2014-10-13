@@ -1,4 +1,5 @@
 class Basket
+
   constructor: ->
     @items = []
     @distinctCount = 0
@@ -6,7 +7,7 @@ class Basket
 
   add: (item) ->
     if @itemExistsInBasket(item)
-      currentItem = getItemFromBasket item
+      currentItem = @getItemFromBasket item
       currentItem.quantity++
     else
       @items.push
@@ -30,5 +31,26 @@ class Basket
     for basketItem in @items
       return basketItem if basketItem.item.id is item.id
     false
+  getQuantity: (item) ->
+    if @itemExistsInBasket item
+      @getItemFromBasket(item).quantity
+    else
+      0
+
+  getItemIndex: (item) ->
+    count = 0
+    for basketItem in @items
+      return count if basketItem.item.id is item.id
+      count++
+    -1
+  remove: (item, quantity = 1) ->
+    return unless @itemExistsInBasket item
+    basketItem = @getItemFromBasket item
+    basketItem.quantity -= quantity
+    if basketItem.quantity <1
+      itemLoc = @getItemIndex item
+      @items.splice(itemLoc, 1)
+    @distinctCount = @items.length
+    @totalCount -= quantity
 
 window.Basket = Basket

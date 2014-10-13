@@ -35,7 +35,6 @@ describe "Basket", ->
   describe "Finding an item in a basket", ->
     it "returns true if the item exist", ->
       basket.add laptop
-      console.log basket.items
       expect(basket.itemExistsInBasket(laptop)).toBeTruthy()
 
     it "returns false if the item not exist", ->
@@ -49,4 +48,43 @@ describe "Basket", ->
     it "returns false if the item is not in basket", ->
       expect(basket.getItemFromBasket(laptop)).toBeFalsy()
 
+  describe "getting the quantity of item in basket", ->
+    it "returns the correct quantity", ->
+      basket.add laptop
+      basket.add laptop
+      expect(basket.getQuantity(laptop)).toEqual 2
 
+    it "returns 0 if there's no items", ->
+      expect(basket.getQuantity(laptop)).toEqual 0
+
+  describe "getting index of item", ->
+    it "returns the index", ->
+      basket.add laptop
+      expect(basket.getItemIndex(laptop)).toEqual 0
+
+    it "returns -1 index if item not found", ->
+      expect(basket.getItemIndex(laptop)).toEqual -1
+
+  describe "removing from a basket", ->
+    it "should deduct the quantity passed in", ->
+      basket.add laptop
+      basket.add laptop
+      basket.remove laptop, 1
+      expect(basket.getQuantity(laptop)).toEqual 1
+      expect(basket.distinctCount).toEqual 1
+      expect(basket.totalCount).toEqual 1
+
+    it "should remove item completely if removing the total quantity", ->
+      basket.add laptop
+      basket.add laptop
+      basket.remove laptop, 2
+      expect(basket.getQuantity(laptop)).toEqual 0
+      expect(basket.itemExistsInBasket(laptop)).toBeFalsy()
+
+    it "should deal with multiple items correctly", ->
+      basket.add laptop
+      basket.add laptop
+      basket.add mouse
+      basket.remove mouse
+      expect(basket.itemExistsInBasket(mouse)).toBeFalsy()
+      expect(basket.getQuantity(laptop)).toEqual 2
