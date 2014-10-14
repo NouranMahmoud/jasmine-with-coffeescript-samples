@@ -17,7 +17,7 @@
         return expect(item.id).toEqual(1);
       });
     });
-    return describe("Protected fields", function() {
+    describe("Protected fields", function() {
       it("Should has the ID as protected field", function() {
         expect(item.protectedFields).toContain("id");
         return expect(item.protectedFields.length).toEqual(1);
@@ -29,12 +29,21 @@
       return it("should not allow an protected field to be updated", function() {
         item.addProtectedField("title");
         item.update({
-          title: "m",
+          id: 2,
+          title: "new title",
           price: 12
         });
         expect(item.id).toEqual(1);
         expect(item.title).toEqual("Mouse");
         return expect(item.price).toEqual(12);
+      });
+    });
+    return describe("fieldIsProtected", function() {
+      it("should return true if field is protected", function() {
+        return expect(item.fieldIsProtected("id")).toBeTruthy();
+      });
+      return it("should return false, if field is not protected", function() {
+        return expect(item.fieldIsProtected("title")).toBeFalsy();
       });
     });
   });

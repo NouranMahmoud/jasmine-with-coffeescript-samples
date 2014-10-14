@@ -23,9 +23,17 @@ describe "Item", ->
     it "should not allow an protected field to be updated", ->
       item.addProtectedField "title"
       item.update {
-        title: "m",
+        id: 2,
+        title: "new title",
         price: 12
       }
       expect(item.id).toEqual 1
       expect(item.title).toEqual "Mouse"
       expect(item.price).toEqual 12
+
+  describe "fieldIsProtected", ->
+    it "should return true if field is protected", ->
+      expect(item.fieldIsProtected "id").toBeTruthy()
+
+    it "should return false, if field is not protected", ->
+      expect(item.fieldIsProtected "title").toBeFalsy()
